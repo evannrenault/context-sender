@@ -1,0 +1,361 @@
+{
+  "name": "context-sender",
+  "displayName": "Context Sender",
+  "description": "Sélectionne des fichiers (ou seulement leurs modifications git) et prépare-les pour un chat IA : texte à coller, fichier à joindre ou découpage en plusieurs messages.",
+  "version": "1.2.0",
+  "publisher": "local",
+  "license": "MIT",
+  "author": "evannrenault",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evannrenault/context-sender.git"
+  },
+  "homepage": "https://github.com/evannrenault/context-sender#readme",
+  "bugs": {
+    "url": "https://github.com/evannrenault/context-sender/issues"
+  },
+  "keywords": [
+    "ai",
+    "llm",
+    "chat",
+    "context",
+    "prompt",
+    "git",
+    "diff",
+    "tokens",
+    "clipboard"
+  ],
+  "engines": {
+    "vscode": "^1.103.0"
+  },
+  "categories": [
+    "AI",
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "contextSender",
+          "title": "Context Sender",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "contextSender": [
+        {
+          "type": "webview",
+          "id": "contextSender.panel",
+          "name": "Envoyer des fichiers"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "contextSender.focus",
+        "title": "Ouvrir le panneau d'envoi",
+        "category": "Context Sender"
+      },
+      {
+        "command": "contextSender.addToSelection",
+        "title": "Ajouter à la sélection",
+        "category": "Context Sender"
+      },
+      {
+        "command": "contextSender.removeFromSelection",
+        "title": "Retirer de la sélection",
+        "category": "Context Sender"
+      },
+      {
+        "command": "contextSender.excludeAlways",
+        "title": "Toujours exclure (ce projet)",
+        "category": "Context Sender"
+      },
+      {
+        "command": "contextSender.sendNow",
+        "title": "Envoyer directement",
+        "category": "Context Sender"
+      },
+      {
+        "command": "contextSender.sendSelection",
+        "title": "Envoyer la sélection",
+        "category": "Context Sender"
+      },
+      {
+        "command": "contextSender.clearSelection",
+        "title": "Vider la sélection",
+        "category": "Context Sender"
+      },
+      {
+        "command": "contextSender.addOpenTabs",
+        "title": "Ajouter les onglets ouverts",
+        "category": "Context Sender"
+      },
+      {
+        "command": "contextSender.addGitChanged",
+        "title": "Ajouter les fichiers modifiés (git)",
+        "category": "Context Sender"
+      },
+      {
+        "command": "contextSender.exportFile",
+        "title": "Créer un fichier à joindre",
+        "category": "Context Sender"
+      },
+      {
+        "command": "contextSender.refresh",
+        "title": "Rescanner le projet",
+        "category": "Context Sender",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "contextSender.openChat",
+        "title": "Ouvrir le chat (navigateur)",
+        "category": "Context Sender",
+        "icon": "$(link-external)"
+      },
+      {
+        "command": "contextSender.openChatInEditor",
+        "title": "Ouvrir le chat dans VSCode",
+        "category": "Context Sender"
+      },
+      {
+        "command": "contextSender.applyResponse",
+        "title": "Appliquer la réponse de l'IA (presse-papiers)",
+        "category": "Context Sender"
+      },
+      {
+        "command": "contextSender.addActive",
+        "title": "Ajouter le fichier actif",
+        "category": "Context Sender"
+      },
+      {
+        "command": "contextSender.cleanExports",
+        "title": "Supprimer tous les exports",
+        "category": "Context Sender"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "contextSender.focus",
+        "key": "ctrl+alt+l",
+        "mac": "cmd+alt+l"
+      },
+      {
+        "command": "contextSender.sendSelection",
+        "key": "ctrl+alt+enter",
+        "mac": "cmd+alt+enter"
+      },
+      {
+        "command": "contextSender.applyResponse",
+        "key": "ctrl+alt+v",
+        "mac": "cmd+alt+v"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "contextSender.addToSelection",
+          "group": "contextsender@1"
+        },
+        {
+          "command": "contextSender.sendNow",
+          "group": "contextsender@2"
+        },
+        {
+          "command": "contextSender.removeFromSelection",
+          "group": "contextsender@3"
+        },
+        {
+          "command": "contextSender.excludeAlways",
+          "group": "contextsender@4"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "contextSender.addToSelection",
+          "group": "contextsender@1"
+        },
+        {
+          "command": "contextSender.sendNow",
+          "group": "contextsender@2"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "contextSender.addToSelection",
+          "group": "contextsender@1"
+        },
+        {
+          "command": "contextSender.applyResponse",
+          "group": "contextsender@2"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "contextSender.refresh",
+          "when": "view == contextSender.panel",
+          "group": "navigation@1"
+        },
+        {
+          "command": "contextSender.openChat",
+          "when": "view == contextSender.panel",
+          "group": "navigation@2"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Context Sender",
+      "properties": {
+        "contextSender.chatName": {
+          "type": "string",
+          "default": "Chat IA",
+          "description": "Nom du chat affiché dans le panneau et les notifications (ex. le nom de l'outil IA que tu utilises)."
+        },
+        "contextSender.chatUrl": {
+          "type": "string",
+          "default": "",
+          "format": "uri",
+          "description": "URL du chat IA ouverte par « Ouvrir le chat ». Vide = aucun lien."
+        },
+        "contextSender.pasteLimit": {
+          "type": "number",
+          "default": 30000,
+          "description": "Taille max (caractères) d'un message collé. Au-delà : fichier à joindre ou découpage en plusieurs messages."
+        },
+        "contextSender.largeSelection": {
+          "type": "string",
+          "enum": [
+            "ask",
+            "file",
+            "parts"
+          ],
+          "enumDescriptions": [
+            "Demander à chaque fois",
+            "Toujours créer un fichier à joindre",
+            "Toujours découper en plusieurs messages"
+          ],
+          "default": "ask",
+          "description": "Que faire quand la sélection dépasse la limite de collage."
+        },
+        "contextSender.exportFormat": {
+          "type": "string",
+          "enum": [
+            "txt",
+            "md"
+          ],
+          "default": "txt",
+          "description": "Extension du fichier unique à joindre."
+        },
+        "contextSender.separateFilesAsTxt": {
+          "type": "boolean",
+          "default": true,
+          "description": "En mode « fichiers séparés », ajoute .txt aux noms (utile si le site refuse .go, .ts…)."
+        },
+        "contextSender.exportFolder": {
+          "type": "string",
+          "default": "",
+          "description": "Dossier des fichiers générés (vide = dossier temporaire du système)."
+        },
+        "contextSender.maskSecrets": {
+          "type": "boolean",
+          "default": true,
+          "description": "Masque mots de passe, tokens, JWT et identifiants d'URL avant envoi."
+        },
+        "contextSender.maxFileKB": {
+          "type": "number",
+          "default": 1024,
+          "description": "Les fichiers plus gros que cette taille (Ko) sont ignorés."
+        },
+        "contextSender.maxFiles": {
+          "type": "number",
+          "default": 20000,
+          "description": "Nombre max de fichiers scannés par dossier racine."
+        },
+        "contextSender.openChatAfterSend": {
+          "type": "boolean",
+          "default": false,
+          "description": "Ouvre le chat automatiquement après chaque envoi."
+        },
+        "contextSender.exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/dist/**",
+            "**/out/**",
+            "**/target/**",
+            "**/build/**",
+            "**/vendor/**",
+            "**/.angular/**",
+            "**/coverage/**",
+            "**/.idea/**",
+            "**/*.min.js",
+            "**/*.min.css",
+            "**/*.map",
+            "**/package-lock.json",
+            "**/yarn.lock",
+            "**/go.sum",
+            "**/.env*",
+            "**/__debug_bin*",
+            "**/go.mod"
+          ],
+          "description": "Motifs exclus partout (liste, « ± Modifiés », clic droit), en plus du .gitignore. Ajoute ici tes fichiers sensibles. Les exclusions faites depuis le panneau (⊘) sont propres au projet et s'ajoutent à celles-ci."
+        },
+        "contextSender.diffContextLines": {
+          "type": "number",
+          "default": 8,
+          "minimum": 0,
+          "maximum": 200,
+          "description": "Mode « Modifs seules » : nombre de lignes de contexte gardées autour de chaque modification (valeur par défaut, modifiable dans le panneau)."
+        },
+        "contextSender.askApplicableAnswer": {
+          "type": "boolean",
+          "default": true,
+          "description": "Valeur par défaut de l'option « Demander une réponse applicable » : ajoute à la consigne le format de réponse que l'extension sait appliquer (fichier complet ou zones diff, précédés de « ### Fichier : chemin »)."
+        },
+        "contextSender.saveAfterApply": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enregistre les fichiers après application d'une réponse (Ctrl+Z reste possible dans l'éditeur, et « ↶ Annuler » dans le panneau)."
+        },
+        "contextSender.openAfterApply": {
+          "type": "boolean",
+          "default": true,
+          "description": "Ouvre le fichier modifié après l'application d'un fichier seul."
+        },
+        "contextSender.exportRetentionHours": {
+          "type": "number",
+          "default": 24,
+          "minimum": 0,
+          "description": "Les fichiers d'export (fichier à joindre, fichiers séparés) sont supprimés automatiquement après ce nombre d'heures : au démarrage, toutes les heures et avant chaque nouvel export. 0 = jamais. Seuls les exports créés par l'extension sont concernés."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.103.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "24.x",
+    "typescript-eslint": "^8.61.1",
+    "eslint": "^10.5.0",
+    "typescript": "^6.0.3",
+    "@vscode/test-cli": "^0.0.15",
+    "@vscode/test-electron": "^3.0.0"
+  }
+}
