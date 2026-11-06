@@ -7,6 +7,8 @@
 ![Dépendances](https://img.shields.io/badge/d%C3%A9pendances%20runtime-0-brightgreen)
 ![Licence](https://img.shields.io/badge/licence-MIT-blue)
 
+![Démo de Context Sender : choisir les fichiers, envoyer, appliquer la réponse de l'IA](media/demo.gif)
+
 Quand la seule IA disponible est un chat dans le navigateur, on passe son temps à copier des fichiers un par un, à dépasser la limite de taille des messages, puis à recopier la réponse à la main. Context Sender fait tout ça depuis un panneau latéral :
 
 ```
@@ -53,7 +55,8 @@ Elle fonctionne avec **n'importe quel chat** : son nom et son URL sont de simple
 
 ## Installation
 
-Depuis un `.vsix` : dans VSCode, *Extensions* → menu `…` → *Install from VSIX…*, ou :
+1. Télécharge le fichier `.vsix` depuis la **[dernière release](https://github.com/evannrenault/context-sender/releases/latest)**.
+2. Dans VSCode : *Extensions* (Ctrl+Shift+X) → menu `…` → *Install from VSIX…*, puis choisis le fichier. Ou en ligne de commande :
 
 ```bash
 code --install-extension context-sender-1.2.0.vsix
